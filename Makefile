@@ -2,7 +2,7 @@
 
 # If you can use Docker without being root, you can `make SUDO= <target>`
 SUDO=$(shell docker info >/dev/null 2>&1 || echo "sudo -E")
-DOCKERHUB_USER=weaveworks
+DOCKERHUB_USER=hand
 SCOPE_EXE=prog/scope
 SCOPE_EXPORT=scope.tar
 CLOUD_AGENT_EXPORT=cloud-agent.tar
@@ -193,11 +193,13 @@ client/build-external/index.html:
 endif
 
 $(SCOPE_UI_BUILD_UPTODATE): client/Dockerfile client/package.json client/webpack.local.config.js client/webpack.production.config.js client/server.js client/.eslintrc
-	$(SUDO) docker build -t $(SCOPE_UI_BUILD_IMAGE) client
+	# $(SUDO) docker build -t $(SCOPE_UI_BUILD_IMAGE) client
+	$(SUDO) docker pull $(SCOPE_UI_BUILD_IMAGE)
 	touch $@
 
 $(SCOPE_BACKEND_BUILD_UPTODATE): backend/*
-	$(SUDO) docker build -t $(SCOPE_BACKEND_BUILD_IMAGE) backend
+	# $(SUDO) docker build -t $(SCOPE_BACKEND_BUILD_IMAGE) backend
+	$(SUDO) docker pull $(SCOPE_BACKEND_BUILD_IMAGE)
 	touch $@
 
 ui-upload: client/build-external/index.html
